@@ -33,6 +33,8 @@ let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 
+let correctAnswers = 0;
+
 
 // 🚀 INIT GAME
 async function initGame() {
@@ -101,6 +103,7 @@ function startGame() {
     document.getElementById('player-name').textContent = currentPlayer;
     score = 0;
     currentQuestionIndex = 0;
+    correctAnswers = 0;
     
     loadQuestion();
 }
@@ -179,6 +182,12 @@ function checkAnswer(selected, correct) {
             button.classList.add('correct');
         } else if (button.textContent === selected && selected !== correct) {
             button.classList.add('wrong');
+            button.classList.remove('shake');
+            void button.offsetWidth;
+            button.classList.add('shake')
+            setTimeout(() => {
+                button.classList.remove('shake');
+            }, 400)
         }
     });
 
@@ -186,6 +195,7 @@ function checkAnswer(selected, correct) {
         // Speed bonus: more points for faster answers
         const points = 10 + timeLeft;
         score += points;
+        correctAnswers ++;
         document.getElementById('score').textContent = score;
     }
 
@@ -213,10 +223,18 @@ async function endGame() {
         alert('Could not save score to leaderboard');
     }
 
+    const totalQuestions = questions.length;
+    let accuracy = (correctAnswers / totalQuestions) * 100;
+
     // Show results
     document.getElementById('final-score').textContent = score;
-    document.getElementById('results-text').textContent = 
-        `You got ${score} points, ${currentPlayer}!`;
+    document.getElementById('results-text').innerHTML = `
+        <div class = "results-highlight">
+            You got ${score} points ${currentPlayer}!<br>
+            You got ${correctAnswers} out of ${totalQuestions} correct!<br> 
+            Accuracy: ${accuracy.toFixed(2)}%
+        </div>`;
+        
 
     // Load final leaderboard
     await loadFinalLeaderboard();
@@ -237,13 +255,17 @@ async function loadFinalLeaderboard() {
     }
 
     const leaderboardElement = document.getElementById('leaderboard-scores');
-    leaderboardElement.innerHTML = data.map((score, index) => `
+    leaderboardElement.innerHTML = data.map((score, index) => {
+        let avatarURL = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(score.player_name)}`;
+        return `
         <div class="leaderboard-item">
+            <img class="avatar" src="${avatarURL}" alt="Avatar for ${score.player_name}">
             <span>${index + 1}. ${score.player_name}</span>
             <span>${score.score} pts</span>
             <small>${new Date(score.created_at).toLocaleDateString()}</small>
         </div>
-    `).join('');
+    `;    
+    }).join('');
 }
 
 // 🔄 RESTART GAME
@@ -251,6 +273,7 @@ function playAgain() {
     showScreen('game-screen');
     score = 0;
     currentQuestionIndex = 0;
+    correctAnswers = 0;
     loadQuestion();
 }
 
@@ -268,5 +291,31 @@ function showScreen(screenName) {
     });
     document.getElementById(screenName).classList.add('active');
 }
+
+
+// List of themes
+const themes = ['default', 'sunset', 'ocean', 'forest'];
+let currentThemeIndex = 0;
+
+// Add event listener for the button
+document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('theme-btn');
+
+    themeBtn.addEventListener('click', () => {
+        // Remove previous theme class
+        document.body.className = '';
+
+        // Cycle to next theme
+        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+        const theme = themes[currentThemeIndex];
+
+        if (theme !== 'default') {
+            document.body.classList.add('theme-' + theme);
+        }
+    });
+});
+
+
+
 
 export { initGame, startGame, playAgain, showLogin };

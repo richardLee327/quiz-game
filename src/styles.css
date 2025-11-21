@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #080101, #f0efed, #7d7c7c);
     margin: 0;
     padding: 20px;
     min-height: 100vh;
@@ -101,7 +101,7 @@ button:hover {
 }
 
 .answers button:hover {
-    background: #2980b9;
+    background: #0475c1;
 }
 
 .answers button.correct {
@@ -124,4 +124,63 @@ button:hover {
     justify-content: space-between;
     padding: 8px;
     border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.results-highlight {
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.shake {
+  animation: shake 1s ease;
+}
+
+@keyframes shake {
+   0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  10%  { transform: translate(-10px, -2px) rotate(-3deg) scale(1.02); }
+  20%  { transform: translate(10px, 2px) rotate(3deg) scale(0.98); }
+  30%  { transform: translate(-12px, -4px) rotate(-5deg) scale(1.03); }
+  40%  { transform: translate(12px, 4px) rotate(5deg) scale(0.97); }
+  50%  { transform: translate(-14px, -3px) rotate(-4deg) scale(1.04); }
+  60%  { transform: translate(14px, 3px) rotate(4deg) scale(0.96); }
+  70%  { transform: translate(-12px, 2px) rotate(-3deg) scale(1.03); }
+  80%  { transform: translate(12px, -2px) rotate(3deg) scale(0.97); }
+  90%  { transform: translate(-10px, 0px) rotate(-2deg) scale(1.01); }
+ 100%  { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+.correct {
+    animation: correctSpin 0.8s ease-in-out;
+}
+
+@keyframes correctSpin {
+    0%   { transform: rotate(0deg) scale(1); }
+    50%  { transform: rotate(10deg) scale(1.2); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+
+body.theme-sunset {
+    background: linear-gradient(135deg, #cd6052, #e0b31e, #ff8c00);
+    color: #fff;
+}
+
+body.theme-ocean {
+    background: linear-gradient(135deg, #0e68ef, #84dbe2, #6395d2);
+    color: #fff;
+}
+
+body.theme-forest {
+    background: linear-gradient(135deg, #06720a, #abeaae, #50de57);
+    color: #fff;
 }
